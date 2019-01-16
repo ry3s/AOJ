@@ -14,22 +14,21 @@ typedef unsigned long long int ULL;
 int main() {
     int n;
     cin >> n;
-    vector<pair<LL, LL> > vp;
+    vector<LL> v;
     rep(i, n) {
-        LL s, t;
-        cin >> s >> t;
-        vp.push_back(make_pair(t, s));
+        string cmd;
+        cin >> cmd;
+        if (cmd == "0") {
+            LL x;
+            cin >> x;
+            v.push_back(x);
+        } else if (cmd == "1") {
+            LL p;
+            cin >> p;
+            cout << v[p] << endl;
+        } else {
+            v.pop_back();
+        }
     }
-    sort(vp.begin(), vp.end());
-    LL ans = 0;
-    LL tmp = -1;
-
-    rep(i, n) {
-        if (vp[i].second <= tmp) continue;
-        tmp = vp[i].first;
-        ans++;
-    }
-    cout << ans << endl;
-
     return 0;
 }
