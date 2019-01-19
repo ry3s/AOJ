@@ -15,9 +15,10 @@ typedef long long int LL;
 typedef unsigned long long int ULL;
 
 int main() {
-    int n, q;
+    int n;
+    LL q;
     cin >> n >> q;
-    vector<queue<LL> > vq(n);
+    vector<priority_queue<LL> > vq(n);
     rep(i, q) {
         int cmd;
         cin >> cmd;
@@ -30,7 +31,7 @@ int main() {
             int t;
             cin >> t;
             if (not vq[t].empty()) {
-                cout << vq[t].front() << endl;
+                cout << vq[t].top() << endl;
             }
         } else if (cmd == 2) {
             int t;
@@ -42,4 +43,5 @@ int main() {
 
     }
     return 0;
+
 }
