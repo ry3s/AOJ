@@ -28,7 +28,8 @@ int main() {
     rep(i, q) {
         LL k;
         cin >> k;
-        auto itr = lower_bound(a.begin(), a.end(), k);
-        cout << distance(a.begin(), itr) << endl;
+        auto lr = lower_bound(a.begin(), a.end(), k);
+        auto ur = upper_bound(a.begin(), a.end(), k);
+        cout << distance(a.begin(), lr) <<  " " << distance(a.begin(), ur) << endl;
     }
 }
