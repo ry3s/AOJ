@@ -20,20 +20,23 @@ typedef unsigned long long int ULL;
 int main() {
     int n;
     cin >> n;
-    int bit = 0;
+
     int k;
+    int T = 0;
     cin >> k;
     rep(i, k) {
         int b;
         cin >> b;
-        bit |= (1 << b);
+        T |= (1 << b);
     }
-    rep(b, 1 << n) {
-        cout << b << ":";
+    for (int sub = 0; ; sub = (sub - T) & T) {
+        cout << sub << ":";
         rep(i, n) {
-            if (b >> i & 1) cout << " " << i;
+            if ((sub >> i) & 1) cout << " " << i;
         }
         cout << endl;
+
+        if (sub == T) break;
     }
     return 0;
 }
