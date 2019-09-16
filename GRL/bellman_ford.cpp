@@ -28,58 +28,33 @@ struct BellmanFord {
         Edge() {}
         Edge(int from, int to, LL cost): from(from), to(to), cost(cost) {}
     };
-
+    const LL INF = (1LL << 60);
     int n;
     vector<vector<int>> graph;
     vector<int> used, reach;
-    BellmanFord(int n): n(n), graph(n), used(n, 0), reach(n, 0) {}
+    vector<LL> dist;
+    BellmanFord(int n): n(n), graph(n), used(n, 0), reach(n, 0), dist(n, INF) {}
 
     vector<Edge> edges;
     void add_edge(int from, int to, LL cost) {
         edges.push_back(Edge(from, to, cost));
         graph[from].push_back(to);
     }
-
-    void dfs(int v) {
-        if (used[v]) return;
-
-        used[v] = 1;
-        for (int u : graph[v]) {
-            dfs(u);
-        }
-    }
-    LL build(int from, int to, bool &neg_loop) {
+    void build(int s, bool &neg_loop) {
+        neg_loop = false;
+        dist[s] = 0;
         rep(i, n) {
-            fill(used.begin(), used.end(), 0);
-            dfs(i);
-            reach[i] = used[to];
-        }
-
-        vector<LL> dist(n, 1e18);
-        dist[from] = 0;
-
-        rep(i, n) {
-            bool updated = false;
-
             for (auto e : edges) {
-                if (not reach[e.from]
-                    or not reach[e.to]
-                    or dist[e.from] == 1e18) continue;
-
-                if (dist[e.to] > dist[e.from] + e.cost) {
+                if (dist[e.from] != INF and dist[e.from] + e.cost < dist[e.to]) {
                     dist[e.to] = dist[e.from] + e.cost;
-                    updated = true;
+
+                    if (i == n - 1) {
+                        neg_loop = true;
+                        return;
+                    }
                 }
             }
-
-            if (not updated) break;
-            if (i == n - 1) {
-                neg_loop = true;
-                return 1e18;
-            }
         }
-        neg_loop = false;
-        return dist[to];
     }
 };
 
@@ -91,23 +66,17 @@ int main() {
         int s, t, d; cin >> s >> t >> d;
         bf.add_edge(s, t, d);
     }
-    vector<string> ans;
-    rep(i, n_vertex) {
-        bool neg_loop;
-        LL dist = bf.build(r, i, neg_loop);
-        if (neg_loop) {
-            cout << "NEGATIVE CYCLE" << endl;
-            return 0;
+    bool neg_loop;
+    bf.build(r, neg_loop);
+    if (neg_loop) {
+        cout << "NEGATIVE CYCLE" << endl;
+        return 0;
+    } else {
+        for (auto d : bf.dist) {
+            if (d == bf.INF) cout << "INF" << endl;
+            else cout << d << endl;
         }
-        string tmp = "";
-        if (dist == 1e18) {
-            tmp = "INF";
-        } else {
-            tmp = to_string(dist);
-        }
-        ans.push_back(tmp);
     }
-    for (auto x : ans) {
-        cout << x << endl;
-    }
+    return 0;
+
 }
